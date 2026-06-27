@@ -15,4 +15,4 @@ node_modules/
 .kiro/
 
 # Explicitly track docs
-!docs/
+docs/
