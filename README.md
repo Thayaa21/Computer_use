@@ -1,54 +1,23 @@
 # Remote Dev Assistant
 
-A system that lets a developer who is away from their laptop call a phone number, have their laptop wake up automatically, and control everything remotely — fetching files, editing code, running tests, and committing — entirely through Slack on their phone.
+## What We're Building
 
----
+A system that lets a developer fix bugs and ship code without ever touching their laptop.
 
-## How It Works
+The developer is away from their desk. They call a phone number, describe the issue, and their laptop wakes up on its own — unlocks, scans the project, and opens Slack with a ready message. From that point, the developer controls everything through Slack on their phone: reading files, editing code, running tests, committing changes. The laptop does the work. The developer just gives instructions.
 
-1. Developer calls a Twilio phone number and describes the issue
-2. The laptop wakes up, unlocks, and snapshots the project directory
-3. A Slack message is posted with the directory tree and a ready prompt
-4. Developer types commands in Slack from their phone
-5. Each message is classified by AI and routed to the right action:
-   - **Show me a file** → file contents posted to Slack
-   - **Edit code** → AI opens VS Code and makes the change
-   - **Run tests** → test suite runs, results posted to Slack
-   - **Commit** → git commit and push, hash posted to Slack
-   - **End session** → laptop locks
+## The Problem We're Solving
 
----
+When a developer is AFK, their options are limited — SSH requires setup, remote desktop is clunky on a phone, and most tools assume the machine is already awake and accessible. There's no natural, phone-first way to interact with a codebase remotely.
 
-## Tech Stack
+This system removes that friction entirely. The developer stays in Slack, uses plain language, and gets results back in seconds.
 
-| Layer | Tool |
-|---|---|
-| Phone call & transcription | Twilio |
-| Backend | Node.js + Express |
-| Intent classification | Claude Haiku 4.5 |
-| Screen control | Claude Computer Use (Sonnet 4.6) |
-| Test & commit automation | UiPath Robot |
-| Orchestration | UiPath Maestro |
-| Mobile interface | Slack Bot |
+## Core Capabilities
 
----
-
-## Quickstart
-
-```bash
-npm install
-cp .env.example .env   # fill in your credentials
-node server.js
-```
-
-Required environment variables: `ANTHROPIC_API_KEY`, `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`, `SLACK_BOT_TOKEN`, `SLACK_SIGNING_SECRET`, `SLACK_CHANNEL_ID`, `UIPATH_BASE_URL`, `UIPATH_TENANT`, `UIPATH_CLIENT_ID`, `UIPATH_CLIENT_SECRET`, `UIPATH_TEST_PROCESS_KEY`, `UIPATH_COMMIT_PROCESS_KEY`, `PROJECT_DIR`
-
-**One-time macOS setup:**  
-System Settings → Privacy & Security → Accessibility → add Terminal  
-System Settings → Privacy & Security → Screen Recording → add Terminal
-
-**For local development**, expose the server with ngrok:
-```bash
-ngrok http 3000
-```
-Set the ngrok URL as the Twilio voice webhook and Slack event subscription URL.
+- **Wake on call** — a phone call triggers the laptop to unlock and prepare a session automatically
+- **Natural language control** — every Slack message is understood and routed to the right action
+- **File access** — read any file in the project from Slack
+- **Code editing** — describe a change in plain language, AI makes it in VS Code
+- **Test execution** — run the test suite and get results posted to Slack
+- **Git commits** — commit and push with a custom message, all from Slack
+- **Session end** — one message locks the laptop and closes the session
