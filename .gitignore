@@ -11,5 +11,8 @@ node_modules/
 # macOS
 .DS_Store
 
-# Kiro internal spec config (optional — remove this line if you want specs in the repo)
+# Kiro internal spec config
 .kiro/
+
+# Explicitly track docs
+!docs/
