@@ -174,17 +174,6 @@ Property-based tests use `fast-check` (100+ iterations each). Unit tests cover w
 
 ---
 
-## Team
-
-| Person | What they built |
-|---|---|
-| Main developer | Everything that makes it work — backend, Computer Use, Slack bot, routing, UiPath integration |
-| Chetan | Voice Enhancement — OpenAI Whisper upgrade for better call transcription (`teammates/chetan/`) |
-| Rishi | Web Dashboard — session log webpage for the demo (`teammates/rishi/`) |
-
-Chetan and Rishi's features are **optional enhancements**. The system runs fully without them.
-
----
 
 ## Cost Estimate
 
