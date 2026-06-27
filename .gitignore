@@ -1,0 +1,15 @@
+# Environment variables — never commit secrets
+.env
+
+# Node
+node_modules/
+
+# Screenshot artifacts
+/tmp/*.png
+*.screenshot.png
+
+# macOS
+.DS_Store
+
+# Kiro internal spec config (optional — remove this line if you want specs in the repo)
+.kiro/
