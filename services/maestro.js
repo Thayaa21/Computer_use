@@ -17,48 +17,37 @@
 
 require('dotenv').config();
 
-// ─── In-memory session log (also used by the dashboard) ──────────────────────
+// Use Rishi's sessionLog for the dashboard events
+const sessionLog = require('./sessionLog');
 
-const sessionLog = [];
+// ─── Event type → Rishi's sessionLog type mapping ────────────────────────────
+const EVENT_TYPE_MAP = {
+  session_started: 'wake',
+  fetch_file:      'fetch_file',
+  send_file:       'fetch_file',
+  edit_code:       'edit_code',
+  run_tests:       'run_tests',
+  commit_code:     'commit_code',
+  end_session:     'end_session',
+};
 
 /**
- * Log an event to the in-memory session log and (if configured) to UiPath Maestro.
- *
- * @param {string} eventType - The type of event (intent name or system event)
- * @param {object} [details] - Additional details about the event
+ * Log an event to Rishi's session log dashboard and (if configured) to UiPath Maestro.
  */
 async function logEvent(eventType, details = {}) {
-  const entry = {
-    timestamp: new Date().toISOString(),
-    type: eventType,
-    details,
-  };
+  const mappedType = EVENT_TYPE_MAP[eventType] || 'info';
+  const detailStr = typeof details === 'string' ? details : Object.values(details).join(' | ').slice(0, 100);
 
-  // Always log to in-memory store (used by dashboard)
-  sessionLog.push(entry);
-  console.log(`[Maestro] ${entry.timestamp} — ${eventType}`, details);
+  // Log to Rishi's dashboard
+  sessionLog.logEvent(mappedType, detailStr);
+  console.log(`[Maestro] ${new Date().toISOString()} — ${eventType}`, details);
 
-  // Fire-and-forget to UiPath Maestro if credentials are set
+  // Fire-and-forget to UiPath Maestro cloud if credentials set
   if (process.env.UIPATH_BASE_URL && process.env.UIPATH_CLIENT_ID && process.env.UIPATH_MAESTRO_PROCESS_KEY) {
-    notifyMaestro(entry).catch(err => {
+    notifyMaestro({ timestamp: new Date().toISOString(), type: eventType, details }).catch(err => {
       console.error('[Maestro] Failed to log to UiPath:', err.message);
     });
   }
-}
-
-/**
- * Get the current session log.
- * @returns {Array} Array of log entries
- */
-function getSessionLog() {
-  return sessionLog;
-}
-
-/**
- * Clear the session log (called on session end).
- */
-function clearSessionLog() {
-  sessionLog.length = 0;
 }
 
 // ─── UiPath Maestro API ───────────────────────────────────────────────────────
@@ -130,4 +119,4 @@ async function notifyMaestro(entry) {
   }
 }
 
-module.exports = { logEvent, getSessionLog, clearSessionLog };
+module.exports = { logEvent };
