@@ -64,7 +64,6 @@ async function getAccessToken() {
     grant_type: 'client_credentials',
     client_id: process.env.UIPATH_CLIENT_ID,
     client_secret: process.env.UIPATH_CLIENT_SECRET,
-    scope: 'OR.Jobs',
   });
 
   const response = await fetch(tokenUrl, {
@@ -82,16 +81,17 @@ async function getAccessToken() {
 }
 
 async function notifyMaestro(entry) {
-  const token = await getAccessToken();
+  const token  = await getAccessToken();
   const org    = process.env.UIPATH_ORG;
   const tenant = process.env.UIPATH_TENANT;
   const base   = process.env.UIPATH_BASE_URL;
+  const folder = process.env.UIPATH_FOLDER || 'Shared';
 
   const url = `${base}/${org}/${tenant}/orchestrator_/odata/Jobs/UiPath.Server.Configuration.OData.StartJobs`;
 
   const payload = {
     startInfo: {
-      ReleaseKey: process.env.UIPATH_MAESTRO_PROCESS_KEY,
+      ReleaseName: process.env.UIPATH_MAESTRO_PROCESS_KEY,
       RobotIds: [],
       NoOfRobots: 0,
       Source: 'Manual',
@@ -109,6 +109,7 @@ async function notifyMaestro(entry) {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
       'X-UIPATH-TenantName': tenant,
+      'X-UIPATH-OrganizationUnitName': folder,
     },
     body: JSON.stringify(payload),
   });
@@ -117,6 +118,8 @@ async function notifyMaestro(entry) {
     const text = await response.text();
     throw new Error(`Maestro job start failed [${response.status}]: ${text}`);
   }
+
+  console.log('[Maestro] ✅ Job triggered in UiPath cloud');
 }
 
 module.exports = { logEvent };
