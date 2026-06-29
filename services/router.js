@@ -64,6 +64,11 @@ async function fetchFile(data, _context) {
 
   try {
     const content = await fs.readFile(absolutePath, 'utf8');
+
+    // Open VS Code with the project folder AND the specific file
+    // so the audience sees it on screen in real time
+    execAsync(`code ${JSON.stringify(getProjectDir())} ${JSON.stringify(absolutePath)}`).catch(() => {});
+
     await slackBot.postFile(filePath, content);
   } catch (err) {
     if (err.code === 'ENOENT') {

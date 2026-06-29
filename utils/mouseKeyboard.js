@@ -28,6 +28,8 @@ const KEY_MAP = {
   cmd:         Key.LeftCmd,
   command:     Key.LeftCmd,
   meta:        Key.LeftMeta,
+  super:       Key.LeftMeta,
+  win:         Key.LeftMeta,
   ctrl:        Key.LeftControl,
   control:     Key.LeftControl,
   alt:         Key.LeftAlt,
