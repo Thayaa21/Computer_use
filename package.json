@@ -1,0 +1,30 @@
+{
+  "name": "ghostdev",
+  "version": "1.0.0",
+  "description": "Remote laptop control via Twilio phone calls and a Slack bot, powered by Claude AI.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --runInBand"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0",
+    "@nut-tree-fork/nut-js": "^4.2.0",
+    "@slack/bolt": "^4.0.0",
+    "@slack/web-api": "^7.0.0",
+    "dotenv": "^16.4.0",
+    "express": "^4.21.0",
+    "screenshot-desktop": "^1.13.0",
+    "twilio": "^5.3.0"
+  },
+  "devDependencies": {
+    "fast-check": "^3.22.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "license": "MIT"
+}
